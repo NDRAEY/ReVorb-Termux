@@ -4,6 +4,7 @@ Recomputes page granule positions in Ogg Vorbis files.
 
 This is a Microsoft Visual Studio port of revorb, originally created by user "Yirkha" on the [HydrogenAudio forums](https://hydrogenaud.io/index.php/topic,64328.0.html/).
 
+Ported to Linux now.
 ## Usage
 
 ```
