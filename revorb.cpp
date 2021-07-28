@@ -18,6 +18,7 @@
 */
 
 #include "ReVorb.h"
+#include <cstring>
 
 bool Failed = false;
 
@@ -152,11 +153,10 @@ int32_t main(int32_t argumentCount, const char* arguments[])
     if (!strcmp(arguments[1], "-"))
     {
         fi = stdin;
-        _setmode(_fileno(stdin), _O_BINARY);
     }
     else
     {
-        fopen_s(&fi, arguments[1], "rb");
+        fi = fopen(arguments[1], "rb");
 
         if (!fi)
         {
@@ -173,11 +173,10 @@ int32_t main(int32_t argumentCount, const char* arguments[])
         if (!strcmp(arguments[2], "-"))
         {
             fo = stdout;
-            _setmode(_fileno(stdout), _O_BINARY);
         }
         else
         {
-            fopen_s(&fo, arguments[2], "wb");
+            fo = fopen( arguments[2], "wb");
 
             if (!fo)
             {
@@ -189,10 +188,10 @@ int32_t main(int32_t argumentCount, const char* arguments[])
     }
     else
     {
-        strcat_s(tmpName, sizeof(tmpName), arguments[1]);
-        strcat_s(tmpName, sizeof(tmpName), ".tmp");
+        strcat(tmpName, arguments[1]);
+        strcat(tmpName, ".tmp");
 
-        fopen_s(&fo, tmpName, "wb");
+        fo = fopen(tmpName, "wb");
 
         if (!fo)
         {
@@ -348,14 +347,14 @@ int32_t main(int32_t argumentCount, const char* arguments[])
     {
         if (Failed)
         {
-            _unlink(tmpName);
-            strcat_s(tmpName, sizeof(tmpName), ".tmp");
+            unlink(tmpName);
+            strcat(tmpName, ".tmp");
         }
         else
         {
-            if (_unlink(arguments[1]) || rename(tmpName, arguments[1]))
+            if (unlink(arguments[1]) || rename(tmpName, arguments[1]))
             {
-                fprintf(stderr, "%S: Could not put the output file back in place.\n", tmpName);
+                fprintf(stderr, "%s: Could not put the output file back in place.\n", tmpName);
             }
         }
     }
